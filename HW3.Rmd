@@ -1,7 +1,7 @@
 ---
 title: "HW3 [Your Team Name Here]"
 author: "[Your Names Here]"
-date: "Due September 26, 2017"
+date: "Due September 27, 2017"
 output: pdf_document
 ---
 
