@@ -1,0 +1,114 @@
+---
+title: "HW3 [Your Team Name Here]"
+author: "[Your Names Here]"
+date: "Due September 26, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(arm)
+library(foreign)
+library(magrittr)
+library(dplyr)
+library(ggplot2)
+# add other libraries
+```
+
+
+We will explore logistic regression with the National Election Study data from Gelman & Hill (GH).  (See Chapter 4.7 for descriptions of some of the variables and 5.1 of GH for initial model fitting).  The link here may also be useful for background information http://gking.harvard.edu/files/preelection.pdf
+
+[*The following code will read in the data and perform some filtering/recoding. Remove this text and modify the  code chunk options so that the code does not appear in the output.*]
+
+```{r data}
+# Data are also at http://www.stat.columbia.edu/~gelman/arm/examples/nes
+
+nes <- read.dta("nes5200_processed_voters_realideo.dta",
+                   convert.factors=F)
+# Data cleaning
+# remove NA's for key variables first
+nes1992 = nes %>% filter(!is.na(black)) %>%
+              filter(!is.na(female)) %>%
+              filter(!is.na(educ1)) %>%
+              filter(!is.na(age)) %>%
+              filter(!is.na(state)) %>%
+              filter(!is.na(income)) %>%
+              filter(presvote %in% 1:2) %>% 
+# limit to year 19922 t0 2000 and add new varialbes
+              filter(year == 1992) %>%
+              mutate(female = gender -1,
+                     black=race ==2,
+# recode vote so that vote = 1 corresponds to a vote for Bush,
+# and vote=0 is a vote for Clinton, where votes for Ross Perot were 
+# removed earlier                     
+                     vote = presvote == 2)
+```
+
+1. Summarize the data for 1992 noting which variables have missing data.  Which variables are categorical but are coded as numerically? 
+
+```{r}
+# add code in this chunk and click green arrow on right to run or use
+# the Run menu.   Add additional chunks using the Insert menu or 
+# short-cut keys.  
+```
+
+2. Fit the logistic regression  to estimate the probability that an individual would vote Bush (Republican) as a function of income and provide a summary of the model.
+
+
+3. Obtain a point estimate and create a 95% confidence interval for the odds ratio for voting Republican for a rich person (income category 5) compared to a poor person (income category 1). *Hint this is more than a one unit change; calculate manually and then show how to modify the output from confint*. Provide a sentence interpreting the result.
+
+
+
+4.  Obtain fitted probabilities and 95% confidence intervals for the income categories using the `predict` function.  Use `ggplot` to recreate the plots in figure 5.1 of Gelman & Hill.  *write a general function?*
+
+5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
+
+
+6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
+
+
+7. Fit a separate logistic regression for each year from 1952 to 2000, using the `subset` option in `glm`,  i.e. add `subset=year==1952`.  For each find the 95% Confidence interval for the odds ratio of voting republican for rich compared to poor for each year in the data set from 1952 to 2000.
+
+
+8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4.
+
+
+9. Fit a logistic regression using income and year as a factor  with an interaction i.e. `income*factor(year)` to the data from 1952-2000.  Find the log odds ratio for income for each year by combining parameter estimates and show that these are the same as in the respective individual logistic regression models fit separately to the data for each year.
+
+10.  Create a plot of fitted probabilities and confidence intervals as in question 4, with curves for all years in the same plot. 
+
+11.  Return to the 1992 year data. Filter out rows of `nes1992` with NA's in the variables below and  recode as factors using the levels in parentheses:
+    + gender (1 = "male", 2 = "female"), 
+    + race (1 = "white", 2 = "black", 3 = "asian", 4 = "native american", 5 = "hispanic", 7 = "other"), 
+    + education ( use `educ1` with levels 1 = "no high school", 2 = "high school graduate", 3 = "some college", 4 = "college graduate"), 
+    + party identification (`partyid3` with levels 1= "democrats", 2 = "independents", 3 = "republicans", 9 = "apolitical" , and 
+    + political ideology (`ideo` 1 = "liberal", 3 ="moderate", 5 = "conservative") 
+
+
+12.  Fit a logistic regression model predicting support for Bush given the the variables above and income as predictors and also consider interactions among the predictors.   You do not need to consider all possible interactions or use model selection, but suggest a couple from the predictors above that might make sense intuitively. 
+
+13.  Plot binned residuals using the function `binnedplot` from package `arm` versus some of the additional predictors in the 1992 dataframe.  Are there any suggestions that the mean or distribution of residuals is different across the levels of the other predictors and that these predictors should be added to the model?  (Provide plots and any other summaries to explain).   
+
+
+14.  Evaluate and compare the different models you fit.  Consider coefficient estimates (are they stable across models) and standard errors (any indications of identifiability problems), residual plots and deviances.
+
+
+15.  Compute the error rate of your model (see GH page 99) and compare it to the error rate of the null model.  We can define a function for the error rate as:
+```{r error.rate, include=FALSE}
+error.rate = function(pred, true) {
+  mean((pred > .5 & true == 0) | (pred < .5 & true == 1))
+}
+```
+
+16.  For your chosen model, discuss and compare the importance of each input variable in the prediction.   Provide a neatly formatted table of odds ratios  and 95\% confidence intervals.
+
+
+17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
+
+
+18.  In the above analysis, we removed missing data.  Repeat the data cleaning steps, but remove only the rows where the response variable, `presvote` is missing.  Recode all of the predictors (including income) so that there is a level that is 'missing' for any NA's for each variable.  How many observations are there now compared to the complete data?
+
+19. For any of above variables, suggest possible reasons why they may be missing.
+
+20.  Rerun your selected model and create a table of parameter estimates and confidence intervals for the odds ratios.  You should have an additional coefficient for any categorical variable with missing data.   Comment on any changes in results for the model including the missing data and the previous one that used only complete data.
+
