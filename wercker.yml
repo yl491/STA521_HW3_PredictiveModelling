@@ -1,0 +1,12 @@
+box: rocker/hadleyverse
+
+build:
+  steps:
+    - script:
+        name: Check for allowed files in repo
+        code: |
+          Rscript -e "source('https://raw.githubusercontent.com/STA521-F17/HW3/master/HW3_whitelist.R')"
+    - script:
+        name: Render R markdown for HW
+        code: |
+          Rscript -e "install.packages('plyr', repos='https://cloud.r-project.org');install.packages('vcd', repos='https://cloud.r-project.org');install.packages('xtable', repos='https://cloud.r-project.org');install.packages('stargazer', repos='https://cloud.r-project.org');install.packages('arm', repos='https://cloud.r-project.org');library(rmarkdown);render('HW3.Rmd')"
