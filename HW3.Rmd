@@ -46,21 +46,42 @@ nes1992 = nes %>% filter(!is.na(black)) %>%
 
 1. Summarize the data for 1992 noting which variables have missing data.  Which variables are categorical but are coded as numerically? 
 
+
+Answer: gender, race, education, prevote.......
 ```{r}
 # add code in this chunk and click green arrow on right to run or use
 # the Run menu.   Add additional chunks using the Insert menu or 
 # short-cut keys.  
+
+summary(nes1992)
+
 ```
 
 2. Fit the logistic regression  to estimate the probability that an individual would vote Bush (Republican) as a function of income and provide a summary of the model.
+```{r}
+vote.glm=glm(formula=vote~income,data=nes1992,family=binomial())
+summary(vote.glm)
+
+```
 
 
 3. Obtain a point estimate and create a 95% confidence interval for the odds ratio for voting Republican for a rich person (income category 5) compared to a poor person (income category 1). *Hint this is more than a one unit change; calculate manually and then show how to modify the output from confint*. Provide a sentence interpreting the result.
+```{r}
 
-
+oddsratio=exp(0.32599*(5-1))
+oddsratio
+CIhigh=0.32599+1.96*0.05688
+CIlow=0.32599-1.96*0.05688
+CIhigh
+CIlow
+```
+For rich, the odds of voting for republican is 3.68 larger than the odds of poor people voting for the republican.
 
 4.  Obtain fitted probabilities and 95% confidence intervals for the income categories using the `predict` function.  Use `ggplot` to recreate the plots in figure 5.1 of Gelman & Hill.  *write a general function?*
+```{r}
 
+
+```
 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
 
 
