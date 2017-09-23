@@ -83,10 +83,10 @@ oddsratio=exp(0.32599*(5-1))
 oddsratio
 CIhigh=0.32599+1.96*0.05688
 CIlow=0.32599-1.96*0.05688
-exp(CIhigh)
-exp(CIlow)
+exp(CIhigh*4)
+exp(CIlow*4)
 
-exp(confint(vote.glm,"income"))
+exp(4*confint(vote.glm,"income"))
 ```
 For rich, the odds of voting for republican is 3.68 larger than the odds of poor people voting for the republican.
 
@@ -149,19 +149,26 @@ vote.glm.1992<-glm(formula=vote~income,data=nes19522000,subset=year==1992,family
 vote.glm.1996<-glm(formula=vote~income,data=nes19522000,subset=year==1996,family=binomial())
 vote.glm.2000<-glm(formula=vote~income,data=nes19522000,subset=year==2000,family=binomial())
 
-exp(confint(vote.glm1952,"income"))
-exp(confint(vote.glm1956,"income"))
-exp(confint(vote.glm1960,"income"))
-exp(confint(vote.glm1964,"income"))
-exp(confint(vote.glm1968,"income"))
-exp(confint(vote.glm1972,"income"))
-exp(confint(vote.glm1976,"income"))
-exp(confint(vote.glm1980,"income"))
-exp(confint(vote.glm1984,"income"))
-exp(confint(vote.glm1988,"income"))
-exp(confint(vote.glm1992,"income"))
-exp(confint(vote.glm1996,"income"))
-exp(confint(vote.glm2000,"income"))
+jjj<-summary(vote.glm.1960)
+jjjj<-coefficients(jjj)
+jjjj[2,1]
+oddsr<-exp(jjjj[2,1]*4)
+
+exp(4*confint(vote.glm.1952,"income"))
+exp(4*confint(vote.glm.1956,"income"))
+exp(4*confint(vote.glm.1960,"income"))
+exp(4*confint(vote.glm.1964,"income"))
+exp(4*confint(vote.glm.1968,"income"))
+exp(4*confint(vote.glm.1972,"income"))
+exp(4*confint(vote.glm.1976,"income"))
+exp(4*confint(vote.glm.1980,"income"))
+exp(4*confint(vote.glm.1984,"income"))
+exp(4*confint(vote.glm.1988,"income"))
+exp(4*confint(vote.glm.1992,"income"))
+exp(4*confint(vote.glm.1996,"income"))
+exp(4*confint(vote.glm.2000,"income"))
+
+
 
 ```
 8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4.
@@ -169,7 +176,11 @@ exp(confint(vote.glm2000,"income"))
 
 9. Fit a logistic regression using income and year as a factor  with an interaction i.e. `income*factor(year)` to the data from 1952-2000.  Find the log odds ratio for income for each year by combining parameter estimates and show that these are the same as in the respective individual logistic regression models fit separately to the data for each year.
 ```{r}
-vote.glm_inte<-glm(formula=vote~income+year+income*year,data=nes19522000,family=binomial())
+vote.glm_inte<-glm(formula=vote~income*factor(year),data=nes19522000,family=binomial())
+summary(vote.glm_inte)
+
+exp(0.10712*4-0.066048*4)
+
 ```
 
 
