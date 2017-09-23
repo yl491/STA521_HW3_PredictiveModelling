@@ -91,9 +91,26 @@ confint(vote.glm,"income")
 For rich, the odds of voting for republican is 3.68 larger than the odds of poor people voting for the republican.
 
 4.  Obtain fitted probabilities and 95% confidence intervals for the income categories using the `predict` function.  Use `ggplot` to recreate the plots in figure 5.1 of Gelman & Hill.  *write a general function?*
+<<<<<<< HEAD
 
+=======
+```{r}
+
+library(ggplot2)
+
+ggplot(vote.glm,aes(x=income,y=vote))+geom_point()+geom_smooth(method="glm")
+
+ggplot( vote.glm, aes(x=income, y=vote)) +
+  geom_point() +
+  stat_smooth( aes(y = vote),  method="glm", family="binomial", se=F)
+```
+>>>>>>> 76c83e16affc6bf5e4f791fbe62c3d96d007225a
 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
-
+```{r}
+vote.glm0=glm(vote~1,data=nes1992,family=binomial)
+anova(vote.glm0,vote.glm,test="Chi")
+plot(vote.glm)
+```
 
 6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
 ```{r}
