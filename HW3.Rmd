@@ -193,12 +193,31 @@ exp(0.10712*4-0.066048*4)
     + education ( use `educ1` with levels 1 = "no high school", 2 = "high school graduate", 3 = "some college", 4 = "college graduate"), 
     + party identification (`partyid3` with levels 1= "democrats", 2 = "independents", 3 = "republicans", 9 = "apolitical" , and 
     + political ideology (`ideo` 1 = "liberal", 3 ="moderate", 5 = "conservative") 
+```{r}
+nes1992filter = nes1992 %>% filter(!is.na(gender)) %>%
+                   filter(!is.na(race)) %>%
+                   filter(!is.na(educ1)) %>%
+                   filter(!is.na(partyid3)) %>%
+                   filter(!is.na(ideo)) %>%
+                   mutate(1 = "male", 2 = "female")
 
+                          
+```
 
 12.  Fit a logistic regression model predicting support for Bush given the the variables above and income as predictors and also consider interactions among the predictors.   You do not need to consider all possible interactions or use model selection, but suggest a couple from the predictors above that might make sense intuitively. 
-
+```{r}
+lm3<-glm(formulat=vote~gender+race+eduction+partyidentification*politicalideology, data=)
+```
+As each party has its own distinct political ideology, so there may be interaction between them.
 13.  Plot binned residuals using the function `binnedplot` from package `arm` versus some of the additional predictors in the 1992 dataframe.  Are there any suggestions that the mean or distribution of residuals is different across the levels of the other predictors and that these predictors should be added to the model?  (Provide plots and any other summaries to explain).   
-
+```{r}
+library(arm)
+expectedvalue<-predict(lm3,newdata=nes1992,type = "response")
+x=expectedvalue
+y=expectedvalue-nes1992$vote
+binnedplot(x,y,xlab="Expected Values", ylab="Average residual", 
+    main="Binned residual plot", cex.pts=0.8, col.pts=1, col.int="gray")
+```
 
 14.  Evaluate and compare the different models you fit.  Consider coefficient estimates (are they stable across models) and standard errors (any indications of identifiability problems), residual plots and deviances.
 
