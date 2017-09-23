@@ -95,11 +95,6 @@ For rich, the odds of voting for republican is 3.68 larger than the odds of poor
 
 library(ggplot2)
 
-ggplot(vote.glm,aes(x=income,y=vote))+geom_point()+geom_smooth(method="glm")
-
-ggplot( vote.glm, aes(x=income, y=vote)) +
-  geom_point() +
-  stat_smooth( aes(y = vote),  method="glm", family="binomial", se=F)
 ```
 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
 ```{r}
