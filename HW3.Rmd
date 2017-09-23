@@ -85,6 +85,8 @@ CIhigh=0.32599+1.96*0.05688
 CIlow=0.32599-1.96*0.05688
 CIhigh
 CIlow
+
+confint(vote.glm,"income")
 ```
 For rich, the odds of voting for republican is 3.68 larger than the odds of poor people voting for the republican.
 
