@@ -105,8 +105,7 @@ predict(vote.glm, data=nes1992,data.frame(income=c(1,2,3,4,5)),interval="confide
 6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
 ```{r}
 
-nes <- read.dta("nes5200_processed_voters_realideo.dta",
-                   convert.factors=F)
+
 # Data cleaning
 # remove NA's for key variables first
 nes19522000 = nes %>% filter(!is.na(black)) %>%
@@ -126,8 +125,24 @@ nes19522000 = nes %>% filter(!is.na(black)) %>%
 ```
 
 7. Fit a separate logistic regression for each year from 1952 to 2000, using the `subset` option in `glm`,  i.e. add `subset=year==1952`.  For each find the 95% Confidence interval for the odds ratio of voting republican for rich compared to poor for each year in the data set from 1952 to 2000.
+```{r}
+
+vote.glm.1952<-glm(formula=vote~income,data=nes19522000,subset=year==1952,family=binomial())
+vote.glm.1956<-glm(formula=vote~income,data=nes19522000,subset=year==1956,family=binomial())
+vote.glm.1960<-glm(formula=vote~income,data=nes19522000,subset=year==1960,family=binomial())
+vote.glm.1964<-glm(formula=vote~income,data=nes19522000,subset=year==1964,family=binomial())
+vote.glm.1968<-glm(formula=vote~income,data=nes19522000,subset=year==1968,family=binomial())
+vote.glm.1972<-glm(formula=vote~income,data=nes19522000,subset=year==1972,family=binomial())
+vote.glm.1976<-glm(formula=vote~income,data=nes19522000,subset=year==1976,family=binomial())
+vote.glm.1980<-glm(formula=vote~income,data=nes19522000,subset=year==1980,family=binomial())
+vote.glm.1984<-glm(formula=vote~income,data=nes19522000,subset=year==1984,family=binomial())
+vote.glm.1988<-glm(formula=vote~income,data=nes19522000,subset=year==1988,family=binomial())
+vote.glm.1992<-glm(formula=vote~income,data=nes19522000,subset=year==1992,family=binomial())
+vote.glm.1996<-glm(formula=vote~income,data=nes19522000,subset=year==1996,family=binomial())
+vote.glm.2000<-glm(formula=vote~income,data=nes19522000,subset=year==2000,family=binomial())
 
 
+```
 8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4.
 
 
