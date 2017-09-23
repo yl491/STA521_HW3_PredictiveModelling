@@ -194,19 +194,30 @@ exp(0.10712*4-0.066048*4)
     + party identification (`partyid3` with levels 1= "democrats", 2 = "independents", 3 = "republicans", 9 = "apolitical" , and 
     + political ideology (`ideo` 1 = "liberal", 3 ="moderate", 5 = "conservative") 
 ```{r}
+
+library(plyr)
+library(dplyr)
 nes1992filter = nes1992 %>% filter(!is.na(gender)) %>%
                    filter(!is.na(race)) %>%
                    filter(!is.na(educ1)) %>%
                    filter(!is.na(partyid3)) %>%
-                   filter(!is.na(ideo)) %>%
-                   mutate(1 = "male", 2 = "female")
+                   filter(!is.na(ideo))
+nes1992filter$gender<-mapvalues(nes1992filter$gender, from=c("1","2"), to =c("male","female"))
+nes1992filter$race<-mapvalues(nes1992filter$race, from=c("1","2","3","4","5","7"), to =c("white","black","asian","native american","hispanic","other"))
+nes1992filter$eduction<-mapvalues(nes1992filter$educ1, from=c("1","2","3","4"), to =c("no high school","high school graduate","some college","college graduate"))
+nes1992filter$partyidentification<-mapvalues(nes1992filter$partyid3, from=c("1","2","3","9"), to =c("democrats","independents","republicans","apolitical"))
+nes1992filter$politicalideology<-mapvalues(nes1992filter$ideo, from=c("1","3","5"), to =c("liberal","moderate","conservative"))
+
+
+
+                  
 
                           
 ```
 
 12.  Fit a logistic regression model predicting support for Bush given the the variables above and income as predictors and also consider interactions among the predictors.   You do not need to consider all possible interactions or use model selection, but suggest a couple from the predictors above that might make sense intuitively. 
 ```{r}
-lm3<-glm(formulat=vote~gender+race+eduction+partyidentification*politicalideology, data=)
+lm3<-glm(formulat=vote~gender+race+eduction+partyidentification*politicalideology, data=new1992filter)
 ```
 As each party has its own distinct political ideology, so there may be interaction between them.
 13.  Plot binned residuals using the function `binnedplot` from package `arm` versus some of the additional predictors in the 1992 dataframe.  Are there any suggestions that the mean or distribution of residuals is different across the levels of the other predictors and that these predictors should be added to the model?  (Provide plots and any other summaries to explain).   
@@ -230,7 +241,9 @@ error.rate = function(pred, true) {
 ```
 
 16.  For your chosen model, discuss and compare the importance of each input variable in the prediction.   Provide a neatly formatted table of odds ratios  and 95\% confidence intervals.
+```{r}
 
+```
 
 17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
 
