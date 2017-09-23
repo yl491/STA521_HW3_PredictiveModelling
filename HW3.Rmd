@@ -99,12 +99,17 @@ For rich, the odds of voting for republican is 3.68 larger than the odds of poor
 ```{r}
 
 predict(vote.glm, data=nes1992,data.frame(income=c(1,2,3,4,5)),interval="confidence")
->>>>>>> ec6fda68fd96e2c9dc5f0d8b0e8a408a83bf9ea2
+
 ```
->>>>>>> 76c83e16affc6bf5e4f791fbe62c3d96d007225a
+
 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
+```{r}
 
+vote.glm0=glm(vote~1,data=nes1992,family=binomial)
+anova(vote.glm0,vote.glm,test="Chi")
+plot(vote.glm)
 
+```
 6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
 ```{r}
 
@@ -136,7 +141,9 @@ nes19522000 = nes %>% filter(!is.na(black)) %>%
 
 9. Fit a logistic regression using income and year as a factor  with an interaction i.e. `income*factor(year)` to the data from 1952-2000.  Find the log odds ratio for income for each year by combining parameter estimates and show that these are the same as in the respective individual logistic regression models fit separately to the data for each year.
 
+
 10.  Create a plot of fitted probabilities and confidence intervals as in question 4, with curves for all years in the same plot. 
+
 
 11.  Return to the 1992 year data. Filter out rows of `nes1992` with NA's in the variables below and  recode as factors using the levels in parentheses:
     + gender (1 = "male", 2 = "female"), 
