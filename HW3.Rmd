@@ -168,6 +168,9 @@ exp(confint(vote.glm2000,"income"))
 
 
 9. Fit a logistic regression using income and year as a factor  with an interaction i.e. `income*factor(year)` to the data from 1952-2000.  Find the log odds ratio for income for each year by combining parameter estimates and show that these are the same as in the respective individual logistic regression models fit separately to the data for each year.
+```{r}
+vote.glm_inte<-glm(formula=vote~income+year+income*year,data=nes19522000,family=binomial())
+```
 
 
 10.  Create a plot of fitted probabilities and confidence intervals as in question 4, with curves for all years in the same plot. 
