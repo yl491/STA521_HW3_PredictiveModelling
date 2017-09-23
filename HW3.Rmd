@@ -34,7 +34,7 @@ nes1992 = nes %>% filter(!is.na(black)) %>%
               filter(!is.na(state)) %>%
               filter(!is.na(income)) %>%
               filter(presvote %in% 1:2) %>% 
-# limit to year 19922 t0 2000 and add new varialbes
+# limit to year 1992 t0 2000 and add new varialbes
               filter(year == 1992) %>%
               mutate(female = gender -1,
                      black=race ==2,
@@ -91,15 +91,39 @@ confint(vote.glm,"income")
 For rich, the odds of voting for republican is 3.68 larger than the odds of poor people voting for the republican.
 
 4.  Obtain fitted probabilities and 95% confidence intervals for the income categories using the `predict` function.  Use `ggplot` to recreate the plots in figure 5.1 of Gelman & Hill.  *write a general function?*
+<<<<<<< HEAD
+
+=======
 ```{r}
 
 predict(vote.glm, data=nes1992,data.frame(income=c(1,2,3,4,5)),interval="confidence")
 ```
+>>>>>>> 76c83e16affc6bf5e4f791fbe62c3d96d007225a
 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
 
 
 6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
+```{r}
 
+nes <- read.dta("nes5200_processed_voters_realideo.dta",
+                   convert.factors=F)
+# Data cleaning
+# remove NA's for key variables first
+nes19522000 = nes %>% filter(!is.na(black)) %>%
+              filter(!is.na(female)) %>%
+              filter(!is.na(educ1)) %>%
+              filter(!is.na(age)) %>%
+              filter(!is.na(state)) %>%
+              filter(!is.na(income)) %>%
+              filter(presvote %in% 1:2) %>% 
+              filter(year>1951 | year<2001) %>%
+              mutate(female = gender -1,
+                     black=race ==2,
+# recode vote so that vote = 1 corresponds to a vote for Bush,
+# and vote=0 is a vote for Clinton, where votes for Ross Perot were 
+# removed earlier                     
+                     vote = presvote == 2)
+```
 
 7. Fit a separate logistic regression for each year from 1952 to 2000, using the `subset` option in `glm`,  i.e. add `subset=year==1952`.  For each find the 95% Confidence interval for the odds ratio of voting republican for rich compared to poor for each year in the data set from 1952 to 2000.
 
