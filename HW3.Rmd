@@ -83,10 +83,10 @@ oddsratio=exp(0.32599*(5-1))
 oddsratio
 CIhigh=0.32599+1.96*0.05688
 CIlow=0.32599-1.96*0.05688
-CIhigh
-CIlow
+exp(CIhigh)
+exp(CIlow)
 
-confint(vote.glm,"income")
+exp(confint(vote.glm,"income"))
 ```
 For rich, the odds of voting for republican is 3.68 larger than the odds of poor people voting for the republican.
 
@@ -149,6 +149,19 @@ vote.glm.1992<-glm(formula=vote~income,data=nes19522000,subset=year==1992,family
 vote.glm.1996<-glm(formula=vote~income,data=nes19522000,subset=year==1996,family=binomial())
 vote.glm.2000<-glm(formula=vote~income,data=nes19522000,subset=year==2000,family=binomial())
 
+exp(confint(vote.glm1952,"income"))
+exp(confint(vote.glm1956,"income"))
+exp(confint(vote.glm1960,"income"))
+exp(confint(vote.glm1964,"income"))
+exp(confint(vote.glm1968,"income"))
+exp(confint(vote.glm1972,"income"))
+exp(confint(vote.glm1976,"income"))
+exp(confint(vote.glm1980,"income"))
+exp(confint(vote.glm1984,"income"))
+exp(confint(vote.glm1988,"income"))
+exp(confint(vote.glm1992,"income"))
+exp(confint(vote.glm1996,"income"))
+exp(confint(vote.glm2000,"income"))
 
 ```
 8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4.
