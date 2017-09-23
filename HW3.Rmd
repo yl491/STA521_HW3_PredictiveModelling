@@ -54,8 +54,19 @@ Answer: gender, race, education, prevote.......
 # short-cut keys.  
 
 summary(nes1992)
+sum(is.na(nes1992$occup1))
+c<-rep(0,62)
+for (i in 1:length(nes1992))
+{
+  c[i]=sum(is.na(nes1992[,i]))
+}
+names(c)=colnames(nes1992)
+c[c>0]="Missing"
+c[c==0]="Good"
+cc<-as.matrix(c)
 
 ```
+\
 
 2. Fit the logistic regression  to estimate the probability that an individual would vote Bush (Republican) as a function of income and provide a summary of the model.
 ```{r}
