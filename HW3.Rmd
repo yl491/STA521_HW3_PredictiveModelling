@@ -204,7 +204,7 @@ nes1992filter = nes1992 %>% filter(!is.na(gender)) %>%
                    filter(!is.na(ideo))
 nes1992filter$gender<-mapvalues(nes1992filter$gender, from=c("1","2"), to =c("male","female"))
 nes1992filter$race<-mapvalues(nes1992filter$race, from=c("1","2","3","4","5","7"), to =c("white","black","asian","native american","hispanic","other"))
-nes1992filter$eduction<-mapvalues(nes1992filter$educ1, from=c("1","2","3","4"), to =c("no high school","high school graduate","some college","college graduate"))
+nes1992filter$education<-mapvalues(nes1992filter$educ1, from=c("1","2","3","4"), to =c("no high school","high school graduate","some college","college graduate"))
 nes1992filter$partyidentification<-mapvalues(nes1992filter$partyid3, from=c("1","2","3","9"), to =c("democrats","independents","republicans","apolitical"))
 nes1992filter$politicalideology<-mapvalues(nes1992filter$ideo, from=c("1","3","5"), to =c("liberal","moderate","conservative"))
 
@@ -217,17 +217,16 @@ nes1992filter$politicalideology<-mapvalues(nes1992filter$ideo, from=c("1","3","5
 
 12.  Fit a logistic regression model predicting support for Bush given the the variables above and income as predictors and also consider interactions among the predictors.   You do not need to consider all possible interactions or use model selection, but suggest a couple from the predictors above that might make sense intuitively. 
 ```{r}
-lm3<-glm(formulat=vote~gender+race+eduction+partyidentification*politicalideology, data=new1992filter)
+glm3<-glm(formula=vote~gender+race+eduction+partyidentification*politicalideology, data=nes1992filter)
+summary(lm3)
 ```
 As each party has its own distinct political ideology, so there may be interaction between them.
 13.  Plot binned residuals using the function `binnedplot` from package `arm` versus some of the additional predictors in the 1992 dataframe.  Are there any suggestions that the mean or distribution of residuals is different across the levels of the other predictors and that these predictors should be added to the model?  (Provide plots and any other summaries to explain).   
 ```{r}
 library(arm)
-expectedvalue<-predict(lm3,newdata=nes1992,type = "response")
-x=expectedvalue
-y=expectedvalue-nes1992$vote
-binnedplot(x,y,xlab="Expected Values", ylab="Average residual", 
-    main="Binned residual plot", cex.pts=0.8, col.pts=1, col.int="gray")
+x<-predict(glm3)
+y<-resid(glm3)
+binnedplot(x,y)
 ```
 
 14.  Evaluate and compare the different models you fit.  Consider coefficient estimates (are they stable across models) and standard errors (any indications of identifiability problems), residual plots and deviances.
