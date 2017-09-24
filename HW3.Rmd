@@ -237,7 +237,12 @@ binnedplot(x,y)
 error.rate = function(pred, true) {
   mean((pred > .5 & true == 0) | (pred < .5 & true == 1))
 }
+glm.probs=predict(glm3)
+glm.pred=rep ("No" ,1133)
+glm.pred[glm.probs >.5]=" Yes"
+table(glm.pred ,nes1992filter$vote )
 ```
+(49+72)/(49+72+393+619)
 
 16.  For your chosen model, discuss and compare the importance of each input variable in the prediction.   Provide a neatly formatted table of odds ratios  and 95\% confidence intervals.
 ```{r}
