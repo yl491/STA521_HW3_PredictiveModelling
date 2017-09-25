@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1506193083247.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F65F15D0",
+    "lastKnownWriteTime" : 1506193402,
+    "last_content_update" : 1506216400552,
+    "path" : "~/STA 521/HW3-Team-12-2/HW3.Rmd",
+    "project_path" : "HW3.Rmd",
+    "properties" : {
+        "cursorPosition" : "74,17",
+        "last_setup_crc32" : "",
+        "scrollLine" : "114"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

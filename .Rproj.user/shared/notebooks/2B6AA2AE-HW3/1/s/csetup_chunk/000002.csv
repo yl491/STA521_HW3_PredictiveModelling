@@ -1,0 +1,8 @@
+"0","knitr::opts_chunk$set(echo = TRUE)"
+"0","library(arm)"
+"0","library(foreign)"
+"0","library(magrittr)"
+"0","library(plyr)"
+"0","library(dplyr)"
+"0","library(ggplot2)"
+"0","# add other libraries"

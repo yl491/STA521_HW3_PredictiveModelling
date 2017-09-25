@@ -1,0 +1,33 @@
+"0","library(plyr)"
+"2","------------------------------------------------------------------------------------------------------------
+"
+"2","You have loaded plyr after dplyr - this is likely to cause problems.
+If you need functions from both plyr and dplyr, please load plyr first, then dplyr:
+library(plyr); library(dplyr)
+"
+"2","------------------------------------------------------------------------------------------------------------
+"
+"2","
+Attaching package: ‘plyr’
+
+"
+"2","The following objects are masked from ‘package:dplyr’:
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise, summarize
+
+"
+"0","library(dplyr)"
+"0","nes1992filter = nes1992 %>% filter(!is.na(gender)) %>%"
+"0","                   filter(!is.na(race)) %>%"
+"0","                   filter(!is.na(educ1)) %>%"
+"0","                   filter(!is.na(partyid3)) %>%"
+"0","                   filter(!is.na(ideo))"
+"0","nes1992filter$gender<-mapvalues(nes1992filter$gender, from=c(""1"",""2""), to =c(""male"",""female""))"
+"0","nes1992filter$race<-mapvalues(nes1992filter$race, from=c(""1"",""2"",""3"",""4"",""5"",""7""), to =c(""white"",""black"",""asian"",""native american"",""hispanic"",""other""))"
+"2","The following `from` values were not present in `x`: 7
+"
+"0","nes1992filter$education<-mapvalues(nes1992filter$educ1, from=c(""1"",""2"",""3"",""4""), to =c(""no high school"",""high school graduate"",""some college"",""college graduate""))"
+"0","nes1992filter$partyidentification<-mapvalues(nes1992filter$partyid3, from=c(""1"",""2"",""3"",""9""), to =c(""democrats"",""independents"",""republicans"",""apolitical""))"
+"0","nes1992filter$politicalideology<-mapvalues(nes1992filter$ideo, from=c(""1"",""3"",""5""), to =c(""liberal"",""moderate"",""conservative""))"
+"0","                  "
+"0","                          "
