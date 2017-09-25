@@ -95,18 +95,15 @@ For rich, the odds of voting for republican is 3.68 larger than the odds of poor
 
 ```{r}
 
-predict(vote.glm, data=nes1992,data.frame(income=c(1,2,3,4,5)),interval="confidence")
-vote.pre=predict(vote.glm,type='response',interval=c("confidence"),level=0.95)
-ggplot(data=nes1992,aes(x=income, y=vote))+geom_jitter()+geom_point(method="glm",se=F)+geom_point(aes(z=nes1992$income, y=vote.pre),color="blue")
+
+vote.pre=predict(vote.glm,data=nes1992,data.frame(income=c(1,2,3,4,5)),type='response',interval=c("confidence"),level=0.95)
 
 #use the version below#
 nes1992$vote.1 = as.double(nes1992$vote)
 ggplot()+geom_point(data=nes1992,aes(income,vote.1),position="jitter")+geom_smooth(data=nes1992,method="glm",method.args=list(family="binomial"),aes(income,vote.1),col="red",se=T)
 #end#
 
-ggplot(nes1992, aes(x=income, y=vote.1)) + geom_point(position = "jitter") + 
-  stat_smooth(method="glm", method.args=list(family="binomial"), se=FALSE)
-#try this version
+
 ```
 
 done 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
@@ -220,8 +217,8 @@ exp(0.10712*4-0.066048*4)
 
 10.  Create a plot of fitted probabilities and confidence intervals as in question 4, with curves for all years in the same plot. 
 ```{r}
-nes19522000$vote.1 = as.double(nes1952$vote)
-ggplot()+geom_point(data=nes19522000,aes(income,vote.1),position="jitter")+geom_smooth(data=nes19522000,method="glm",method.args=list(family="binomial"),aes(income,vote.1),col="red",se=T)
+#nes19522000$vote.1 = as.double(nes19522000$vote)
+#ggplot()+geom_point(data=nes19522000,aes(income,vote.1),position="jitter")+geom_smooth(data=nes19522000,method="gl#m",method.args=list(family="binomial"),aes(income,vote.1),col="red",se=T)
 ```
 
 
