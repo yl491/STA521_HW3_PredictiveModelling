@@ -99,7 +99,10 @@ predict(vote.glm, data=nes1992,data.frame(income=c(1,2,3,4,5)),interval="confide
 vote.pre=predict(vote.glm,type='response',interval=c("confidence"),level=0.95)
 ggplot(data=nes1992,aes(x=income, y=vote))+geom_jitter()+geom_point(method="glm",se=F)+geom_point(aes(z=nes1992$income, y=vote.pre),color="blue")
 
-
+nes1992$vote.1 = as.double(nes1992$vote)
+ggplot(nes1992, aes(x=income, y=vote.1)) + geom_point(position = "jitter") + 
+  stat_smooth(method="glm", method.args=list(family="binomial"), se=FALSE)
+#try this version
 ```
 
 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
