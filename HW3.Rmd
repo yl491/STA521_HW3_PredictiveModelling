@@ -48,7 +48,7 @@ nes1992 = nes %>% filter(!is.na(black)) %>%
 1. Summarize the data for 1992 noting which variables have missing data.  Which variables are categorical but are coded as numerically? 
 
 
-Answer: gender, race, education, prevote.......
+Answer: gender, race, education, prevote，urban, region, income, occup, union, religion, martial status, partyid, fatherparty, motherparty, dislikes, rlikes are all categorical but are coded as numerically.
 ```{r}
 # add code in this chunk and click green arrow on right to run or use
 # the Run menu.   Add additional chunks using the Insert menu or 
@@ -92,14 +92,13 @@ exp(4*confint(vote.glm,"income"))
 For rich, the odds of voting for republican is 3.68 larger than the odds of poor people voting for the republican.
 
 4.  Obtain fitted probabilities and 95% confidence intervals for the income categories using the `predict` function.  Use `ggplot` to recreate the plots in figure 5.1 of Gelman & Hill.  *write a general function?*
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-=======
-=======
 ```{r}
 
 predict(vote.glm, data=nes1992,data.frame(income=c(1,2,3,4,5)),interval="confidence")
+vote.pre=predict(vote.glm,type='response',interval=c("confidence"),level=0.95)
+ggplot(data=nes1992,aes(x=income, y=vote))+geom_jitter()+geom_point(method="glm",se=F)+geom_point(aes(z=nes1992$income, y=vote.pre),color="blue")
+
 
 ```
 
@@ -240,7 +239,12 @@ binnedplot(x,y)
 error.rate = function(pred, true) {
   mean((pred > .5 & true == 0) | (pred < .5 & true == 1))
 }
+glm.probs=predict(glm3)
+glm.pred=rep ("No" ,1133)
+glm.pred[glm.probs >.5]=" Yes"
+table(glm.pred ,nes1992filter$vote )
 ```
+(49+72)/(49+72+393+619)
 
 16.  For your chosen model, discuss and compare the importance of each input variable in the prediction.   Provide a neatly formatted table of odds ratios  and 95\% confidence intervals.
 ```{r}
