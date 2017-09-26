@@ -1,6 +1,6 @@
 ---
-title: "HW3 [Your Team Name Here]"
-author: "[Your Names Here]"
+title: "HW3 [Team 12]"
+author: "[Yunxuan Li, Wenxin Liao, Yan Zhao]"
 date: "Due September 27, 2017"
 output: pdf_document
 ---
@@ -99,9 +99,16 @@ For rich, the odds of voting for republican is 3.68 larger than the odds of poor
 vote.pre=predict(vote.glm,data=nes1992,data.frame(income=c(1,2,3,4,5)),type='response',interval=c("confidence"),level=0.95)
 
 #use the version below#
-nes1992$vote.1 = as.double(nes1992$vote)
-ggplot()+geom_point(data=nes1992,aes(income,vote.1),position="jitter")+geom_smooth(data=nes1992,method="glm",method.args=list(family="binomial"),aes(income,vote.1),col="red",se=T)
+#nes1992$vote.1 = as.double(nes1992$vote)
+#ggplot()+geom_point(data=nes1992,aes(income,vote.1),position="jitter")+geom_smooth(data=nes1992,method="glm",method.args=list(family="binomial"),aes(income,vote.1),col="red",se=T)
 #end#
+#use the version below- Yunxuan""
+#first plot#
+ggplot(data=nes1992,aes(x=income,y=as.numeric(vote)))+geom_point(position=position_jitter(width=0.3,height=0.03),shape=21,size=0.01)+geom_smooth(data=nes1992,method="glm",aes(x=income,y=as.numeric(vote)),method.args=list(family="binomial"),fullrange=T,se=F,size=0.5)+scale_x_continuous(limits=c(-5,10))+geom_abline()
+
+#second plot#
+ggplot(data=nes1992,aes(x=income,y=as.numeric(vote)))+geom_point(position=position_jitter(width=0.3,height=0.1),shape=21,size=0.01)+geom_smooth(data=nes1992,method="glm",method.args=list(family="binomial"),aes(x=income,y=as.numeric(vote)),fullrange=T,size=0.5)
+
 
 
 ```
@@ -169,7 +176,7 @@ conf_int[4,]<-cbind(exp(coefficients(summary(vote.glm.1964))[2,1]*4),exp(4*confi
 conf_int[5,]<-cbind(exp(coefficients(summary(vote.glm.1968))[2,1]*4),exp(4*confint(vote.glm.1968,"income"))[1],exp(4*confint(vote.glm.1968,"income"))[2])
 conf_int[6,]<-cbind(exp(coefficients(summary(vote.glm.1972))[2,1]*4),exp(4*confint(vote.glm.1972,"income"))[1],exp(4*confint(vote.glm.1972,"income"))[2])
 conf_int[7,]<-cbind(exp(coefficients(summary(vote.glm.1976))[2,1]*4),exp(4*confint(vote.glm.1976,"income"))[1],exp(4*confint(vote.glm.1976,"income"))[2])
-conf_int[8,]<-cbind(exp(coefficients(summary(vote.glm.1980))[2,1]*4),exp(4*confint(vote.glm.1980,"income"))[1],exp(4*confint(vote.glm.1980,"income")))[2]
+conf_int[8,]<-cbind(exp(coefficients(summary(vote.glm.1980))[2,1]*4),exp(4*confint(vote.glm.1980,"income"))[1],exp(4*confint(vote.glm.1980,"income"))[2])
 conf_int[9,]<-cbind(exp(coefficients(summary(vote.glm.1984))[2,1]*4),exp(4*confint(vote.glm.1984,"income"))[1],exp(4*confint(vote.glm.1984,"income"))[2])
 conf_int[10,]<-cbind(exp(coefficients(summary(vote.glm.1988))[2,1]*4),exp(4*confint(vote.glm.1988,"income"))[1],exp(4*confint(vote.glm.1988,"income"))[2])
 conf_int[11,]<-cbind(exp(coefficients(summary(vote.glm.1992))[2,1]*4),exp(4*confint(vote.glm.1992,"income"))[1],exp(4*confint(vote.glm.1992,"income"))[2])
@@ -189,7 +196,7 @@ conf_int_df<-as.data.frame(conf_int)
 
 
 ```
-8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4.
+done 8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4.
 ```{r}
 ggplot(conf_int_df,aes(x=rownames(conf_int_df),y=Value))+geom_point()+geom_linerange(aes(ymin=lower,ymax=upper))+xlab("Year")+ylab("CI")
 ```
@@ -207,7 +214,7 @@ exp(0.10712*4-0.066048*4)
 10.  Create a plot of fitted probabilities and confidence intervals as in question 4, with curves for all years in the same plot. 
 ```{r}
 #shape,size,alpha in geom point
-ggplot(data=nes19522000,aes(x=income,y=as.numeric(vote),group=factor(year)))+geom_point(position=position_jitter(width=0.3,height=0.1),shape=21,size=0.01)+geom_smooth(data=nes19522000,method="glm",method.args=list(family="binomial"),aes(x=income,y=as.numeric(vote),group=factor(year),color=factor(year)),method.args=list(family="binomial"),fullrange=T)+scale_x_continuous(limits=c(-3,8))
+ggplot(data=nes19522000,aes(x=income,y=as.numeric(vote),group=factor(year)))+geom_point(position=position_jitter(width=0.3,height=0.1),shape=21,size=0.01)+geom_smooth(data=nes19522000,method="glm",method.args=list(family="binomial"),aes(x=income,y=as.numeric(vote),group=factor(year),color=factor(year)),fullrange=T)+scale_x_continuous(limits=c(-3,8))
 ```
 
 
