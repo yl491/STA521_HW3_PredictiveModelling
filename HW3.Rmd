@@ -113,7 +113,7 @@ ggplot(data=nes1992,aes(x=income,y=as.numeric(vote)))+geom_point(position=positi
 
 ```
 
-done 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
+UNDONE!!!!!!!!ADDS ANALYSIS 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
 ```{r}
 
 vote.glm0=glm(vote~1,data=nes1992,family=binomial)
@@ -121,6 +121,8 @@ anova(vote.glm0,vote.glm,test="Chi")
 plot(vote.glm)
 
 ```
+\
+Answer: Figure 3 suggests underfitting.\
 done 6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
 ```{r}
 
@@ -247,25 +249,53 @@ nes1992filter$poli_id<-mapvalues(nes1992filter$ideo, from=c("1","3","5"), to =c(
 
 12.  Fit a logistic regression model predicting support for Bush given the the variables above and income as predictors and also consider interactions among the predictors.   You do not need to consider all possible interactions or use model selection, but suggest a couple from the predictors above that might make sense intuitively. 
 ```{r}
-glm3<-glm(formula=vote~gender+race+education+partyidentification+politicalideology+race:education+gender:education, data=nes1992filter,family="binomial")
+#glm3<-glm(formula=vote~gender+race+education+party_id+poli_id
+         # +race:education+race:party_id+race:poli_id
+        #  +gender:education+gender:poli_id+gender:party_id
+        #  +education:party_id+education:poli_id
+        #  +party_id:poli_id, data=nes1992filter,family="binomial")
+#glm3<-glm(formula=vote~gender:party_id+education,data=nes1992filter,family="binomial")
+#the best i could ever find after testing for 1.5 hours: 1072.9 vs 1113 ↓
+glm3<-glm(formula=vote~poli_id+education:race,data=nes1992filter,family="binomial")
 summary(glm3)
 ```
-As each party has its own distinct political ideology, so there may be interaction between them.
+\
+Answer: As each party has its own distinct political ideology, so there may be interaction between them.\
 13.  Plot binned residuals using the function `binnedplot` from package `arm` versus some of the additional predictors in the 1992 dataframe.  Are there any suggestions that the mean or distribution of residuals is different across the levels of the other predictors and that these predictors should be added to the model?  (Provide plots and any other summaries to explain).   
 ```{r}
 #predict<-predict(fit,type="response")
 #table(y,predict>0.5)
-x<-predict(glm3)
+x<-predict(glm3,type="response")
 y<-resid(glm3)
 binnedplot(x,y)
-```
 
-14.  Evaluate and compare the different models you fit.  Consider coefficient estimates (are they stable across models) and standard errors (any indications of identifiability problems), residual plots and deviances.
+binnedplot(glm3$linear.predictors,rstandard(glm3))
+```
+\
+Answer: I don't think there is any obvious patterns for these binned points. They look random to me. Therefore, I will not recommend to add any other predictors.\
+
+14.  Evaluate and compare the different models you fit.  Consider coefficient estimates (are they stable across models) and standard errors (any indications of identifiability problems), residual plots and deviances.\
+Answer1: We compare the w/ and w/o the interaction, as is mentioned by the professor in Piazza.\
 ```{r}
 #glm3
-#vote.glm_inte
-```
+summary(glm3)
 
+#without interaction
+glm_sole<-glm(formula=vote~poli_id,family="binomial",data=nes1992filter)
+summary(glm_sole)
+
+
+```
+\
+Answer2: With interaction vs without interaction: with interaction, res: 1072, dof: 1113, only a little bit overfitting; without interaction, res: 1202, 1130, underfitting. We have more information and is better fitting the data. The coefficients for "political identification" are -2.91, -1.07 in the glm3(the one w/ interaction), and -2.69, -1.16 in the model w/o interaction -- I believe they are pretty consistent across models. Standard errors look good to me: they are really small. Also, many coefficients in the glm3 model(the one w/ interaction) are significant, which means that the interaction between race and education is sth that we needs to take into account.
+\
+```{r}
+plot(glm3)
+plot(glm_sole)
+
+```
+\
+Answer: the Q-Q plot of glm3 is much better! the left part almost connects to the right part, and within each part it is much more continuous; the Q-Q plot of glm_sole is much more discrete and disconnected. Also if we look at the residual vs leverage plots, the one of glm3 does not have influential points, but the one of glm_sole has. To summarize, the model with interaction performs better and fits better! \
 15.  Compute the error rate of your model (see GH page 99) and compare it to the error rate of the null model.  We can define a function for the error rate as:
 ```{r error.rate, include=FALSE}
 error.rate = function(pred, true) {
