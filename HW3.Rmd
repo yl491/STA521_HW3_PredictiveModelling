@@ -3,6 +3,7 @@ title: "HW3 [Team 12]"
 author: '[Yunxuan Li, Wenxin Liao, Yan Zhao]'
 date: "Due September 27, 2017"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
@@ -204,15 +205,12 @@ ggplot(conf_int_df,aes(x=rownames(conf_int_df),y=Value))+geom_point()+geom_liner
 vote.glm_inte<-glm(formula=vote~income*factor(year),data=nes19522000,family=binomial())
 #summary(vote.glm_inte)
 su<-coefficients(summary(vote.glm_inte))
-  
-
 oddsr<-numeric(13)
 oddsr[1]=exp(su[2,1]*4)
 for (i in 1: 12)
 {
   oddsr[i+1]=exp(4*(su[2,1]+su[14+i,1]))
 }
-  
 oddsr
 
 ```
@@ -244,10 +242,6 @@ nes1992filter$race<-mapvalues(nes1992filter$race, from=c("1","2","3","4","5","7"
 nes1992filter$education<-mapvalues(nes1992filter$educ1, from=c("1","2","3","4"), to =c("no high school","high school graduate","some college","college graduate"))
 nes1992filter$party_id<-mapvalues(nes1992filter$partyid3, from=c("1","2","3","9"), to =c("democrats","independents","republicans","apolitical"))
 nes1992filter$poli_id<-mapvalues(nes1992filter$ideo, from=c("1","3","5"), to =c("liberal","moderate","conservative"))
-
-
-
-                  
 
                           
 ```
@@ -385,7 +379,7 @@ summary(glm4)
 
 table<-matrix(NA,30,3)
 j=1 
-for(i in rownames(coefficients(summary(glm3)))){
+for(i in rownames(coefficients(summary(glm4)))){
   table[j,1]<-exp((summary(glm4)$coefficients[j,1])+(summary(glm4)$coefficients[j,2])*1.96)
   table[j,2]<-exp((summary(glm4)$coefficients[j,1])-(summary(glm4)$coefficients[j,2])*1.96)
   table[j,3]<-exp(summary(glm4)$coefficients[j,1])
