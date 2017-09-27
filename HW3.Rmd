@@ -52,7 +52,7 @@ nes1992 = nes %>% filter(!is.na(black)) %>%
 1. Summarize the data for 1992 noting which variables have missing data.  Which variables are categorical but are coded as numerically? \
 
 
-Answer: "gender", "race", "education", "prevote"，urban, region, income, occup, union, religion, martial status, partyid, fatherparty, motherparty, dislikes, rlikes are all categorical but are coded as numerically.
+Answer: gender, race, education, prevote，urban, region, income, occup, union, religion, martial status, partyid, fatherparty, motherparty, dislikes, rlikes are all categorical but are coded as numerically.
 ```{r}
 # add code in this chunk and click green arrow on right to run or use
 # the Run menu.   Add additional chunks using the Insert menu or 
@@ -124,7 +124,7 @@ plot(vote.glm)
 
 ```
 \
-Answer: Figure 3 suggests underfitting.\
+Answer: Income has some influence to the model but we still think the model is underfitting. Figure 3 suggests underfitting.\
 6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
 ```{r}
 
