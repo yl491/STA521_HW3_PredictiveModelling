@@ -332,8 +332,8 @@ Answer: According to the p value of the summary of our chosen model, five predic
 17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
 \
 We have identify five important coefficients in the previous problem.To interprete those key coeeffcients, we have following conclusion.
-When a person identify its poli_id as liberal, we expect the odds of voting for bush decrease.
-When a person identify its poli_id as moderate, we expect the odds of voting for bush will be  smaller
+When a person identify his poli_id as liberal, we expect the odds of voting for bush decrease.
+When a person identify his poli_id as moderate, we expect the odds of voting for bush will be  smaller
 When a person has  education in college, with race of black, we expect the odds of voting for bush will decrease.
 When a person has  education in high school, with race of black, we expect the odds of voting for bush will decrease.
 When a person has  education in some college with race of black, we expect the odds of voting for bush will decrease.\
