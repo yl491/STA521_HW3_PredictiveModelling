@@ -350,8 +350,12 @@ nes1992new <- nes %>%
   
           dplyr::select(income, race, educ1, partyid3, ideo, vote)
 
-nes1992new$poli_id<-mapvalues(nes1992new$ideo, from=c("1","3","5"), to =c("liberal","moderate","conservative"))  
+nes1992new$poli_id<-mapvalues(nes1992new$ideo, from=c("1","3","5"), to =c("liberal","moderate","conservative"))
+nes1992new$gender<-mapvalues(nes1992new$gender, from=c("1","2"), to =c("male","female"))
+nes1992new$race<-mapvalues(nes1992new$race, from=c("1","2","3","4","5","7"), to =c("white","black","asian","native american","hispanic","other"))
 nes1992new$education<-mapvalues(nes1992new$educ1, from=c("1","2","3","4"), to =c("no high school","high school graduate","some college","college graduate"))
+
+
 
 names(nes1992new)[-6]
 
@@ -372,6 +376,21 @@ We can see that there are few missing data for partyid. It's because once people
 ```{r}
 glm4<-glm(formula=vote~poli_id+education:race,data=nes1992new,family="binomial")
 summary(glm4)
+
+
+table<-matrix(NA,30,3)
+j=1 
+for(i in rownames(coefficients(summary(glm3)))){
+  table[j,1]<-exp((summary(glm4)$coefficients[j,1])+(summary(glm4)$coefficients[j,2])*1.96)
+  table[j,2]<-exp((summary(glm4)$coefficients[j,1])-(summary(glm4)$coefficients[j,2])*1.96)
+  table[j,3]<-exp(summary(glm4)$coefficients[j,1])
+  j=j+1
+}
+colnames(table)<-c("97.5%CI","2.5%CI", "odds ratio")
+rownames(table)<-rownames(coefficients(summary(glm4)))
+
+kable(table)
+
 ```
 
 
