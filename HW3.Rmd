@@ -332,25 +332,28 @@ According to the p value of the summary of our chosen model, four predictors has
 
 
 18.  In the above analysis, we removed missing data.  Repeat the data cleaning steps, but remove only the rows where the response variable, `presvote` is missing.  Recode all of the predictors (including income) so that there is a level that is 'missing' for any NA's for each variable.  How many observations are there now compared to the complete data?
-```{r data}
-# Data are also at http://www.stat.columbia.edu/~gelman/arm/examples/nes
-
-nes <- read.dta("nes5200_processed_voters_realideo.dta",
-                   convert.factors=F)
-# Data cleaning
-# remove NA's for key variables first
-nes1992filter2 = nes %>% 
-              filter(!is.na(presvote)) %>%
+```{r}
+nes1992new <- nes %>%
+  filter(!is.na(presvote)) %>%
               filter(presvote %in% 1:2) %>% 
-# limit to year 1992 t0 2000 and add new varialbes
               filter(year == 1992) %>%
               mutate(female = gender -1,
-                     black=race ==2,
-# recode vote so that vote = 1 corresponds to a vote for Bush,
-# and vote=0 is a vote for Clinton, where votes for Ross Perot were 
-# removed earlier                     
-                     vote = presvote == 2)
+                     black=race == 2,
+                     vote = presvote == 2) %>%
 
+  
+          dplyr::select(income, race, educ1, partyid3, ideo, vote)
+
+nes1992new$poli_id<-mapvalues(nes1992new$ideo, from=c("1","3","5"), to =c("liberal","moderate","conservative"))  
+nes1992new$education<-mapvalues(nes1992new$educ1, from=c("1","2","3","4"), to =c("no high school","high school graduate","some college","college graduate"))
+
+names(nes1992new)[-6]
+
+for (column in names(nes1992new)[-6]){
+  nes1992new[is.na(nes1992new[, column]), column] <- "missing"
+  nes1992new[, column] <- as.factor(nes1992new[, column])
+}
+summary(nes1992new)
 ```
 
 
@@ -360,4 +363,8 @@ nes1992filter2 = nes %>%
 
 
 20.  Rerun your selected model and create a table of parameter estimates and confidence intervals for the odds ratios.  You should have an additional coefficient for any categorical variable with missing data.   Comment on any changes in results for the model including the missing data and the previous one that used only complete data.
+```{r}
+glm4<-glm(formula=vote~poli_id+education:race,data=nes1992new,family="binomial")
+summary(glm4)
 
+```
