@@ -1,8 +1,10 @@
 ---
 title: "HW3 [Team 12]"
-author: "[Yunxuan Li, Wenxin Liao, Yan Zhao]"
+author: '[Yunxuan Li, Wenxin Liao, Yan Zhao]'
 date: "Due September 27, 2017"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -46,10 +48,10 @@ nes1992 = nes %>% filter(!is.na(black)) %>%
                      vote = presvote == 2)
 ```
 
-done 1. Summarize the data for 1992 noting which variables have missing data.  Which variables are categorical but are coded as numerically? 
+done 1. Summarize the data for 1992 noting which variables have missing data.  Which variables are categorical but are coded as numerically? \
 
 
-Answer: gender, race, education, prevote，urban, region, income, occup, union, religion, martial status, partyid, fatherparty, motherparty, dislikes, rlikes are all categorical but are coded as numerically.
+Answer: "gender", "race", "education", "prevote"，urban, region, income, occup, union, religion, martial status, partyid, fatherparty, motherparty, dislikes, rlikes are all categorical but are coded as numerically.
 ```{r}
 # add code in this chunk and click green arrow on right to run or use
 # the Run menu.   Add additional chunks using the Insert menu or 
@@ -298,7 +300,7 @@ plot(glm_sole)
 \
 Answer: the Q-Q plot of glm3 is much better! the left part almost connects to the right part, and within each part it is much more continuous; the Q-Q plot of glm_sole is much more discrete and disconnected. Also if we look at the residual vs leverage plots, the one of glm3 does not have influential points, but the one of glm_sole has. To summarize, the model with interaction performs better and fits better! \
 15.  Compute the error rate of your model (see GH page 99) and compare it to the error rate of the null model.  We can define a function for the error rate as:
-```{r error.rate, include=FALSE}
+```{r}
 error.rate = function(pred, true) {
   mean((pred > .5 & true == 0) | (pred < .5 & true == 1))
 }
@@ -312,6 +314,7 @@ table(nes1992filter$vote,predictnull>0.5)
 
 ```
 As the error rate for null is 0.412 and the error rate for our model is 0.215,our model perform better
+\
 16.  For your chosen model, discuss and compare the importance of each input variable in the prediction.   Provide a neatly formatted table of odds ratios  and 95\% confidence intervals.
 ```{r}
 table<-matrix(NA,20,3)
@@ -327,15 +330,17 @@ rownames(table)<-rownames(coefficients(summary(glm3)))
 
 kable(table)
 ```
-According to the p value of the summary of our chosen model, four predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black.
+\
+According to the p value of the summary of our chosen model, four predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black.\
 
 17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
+\
 We have identify five important coefficients.
 As poli_id liberal increase by one unit, we expect the odds of voting for bush will be exp(-2.91279 ) times smaller
 As poli_id moderate increase by one unit, we expect the odds of voting for bush will be  exp(-1) times smaller
 As interaction of education college graduate with race of blackincrease by one unit, we expect the odds of voting for bush will be exp(-2.77)smaller
 As interaction of education high school graduate with race of balck increase by one unit, we expect the odds of voting for bush will be exp(-2.78) smaller
-As interaction of education some college and race of black increase by one unit, we expect the odds of voting for bush will be exp(-2.74) smaller
+As interaction of education some college and race of black increase by one unit, we expect the odds of voting for bush will be exp(-2.74) smaller\
 
 18.  In the above analysis, we removed missing data.  Repeat the data cleaning steps, but remove only the rows where the response variable, `presvote` is missing.  Recode all of the predictors (including income) so that there is a level that is 'missing' for any NA's for each variable.  How many observations are there now compared to the complete data?
 ```{r}
@@ -368,9 +373,9 @@ summary(nes1992new)
 
 
 19. For any of above variables, suggest possible reasons why they may be missing.
-
+\
 We can see that there are few missing data for partyid. It's because once people choose a party, it's very likely for the person to persist. While education changed constantly and is difficult to record, so there are more missing data for education. 
-
+\
 
 20.  Rerun your selected model and create a table of parameter estimates and confidence intervals for the odds ratios.  You should have an additional coefficient for any categorical variable with missing data.   Comment on any changes in results for the model including the missing data and the previous one that used only complete data.
 ```{r}
