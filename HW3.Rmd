@@ -331,25 +331,23 @@ table(glm.pred ,nes1992filter$vote )
 
 
 18.  In the above analysis, we removed missing data.  Repeat the data cleaning steps, but remove only the rows where the response variable, `presvote` is missing.  Recode all of the predictors (including income) so that there is a level that is 'missing' for any NA's for each variable.  How many observations are there now compared to the complete data?
-```{r data}
-# Data are also at http://www.stat.columbia.edu/~gelman/arm/examples/nes
-
-nes <- read.dta("nes5200_processed_voters_realideo.dta",
-                   convert.factors=F)
-# Data cleaning
-# remove NA's for key variables first
-nes1992filter2 = nes %>% 
-              filter(!is.na(presvote)) %>%
+```{r}
+nes1992new <- nes %>%
+  filter(!is.na(presvote)) %>%
               filter(presvote %in% 1:2) %>% 
-# limit to year 1992 t0 2000 and add new varialbes
               filter(year == 1992) %>%
               mutate(female = gender -1,
-                     black=race ==2,
-# recode vote so that vote = 1 corresponds to a vote for Bush,
-# and vote=0 is a vote for Clinton, where votes for Ross Perot were 
-# removed earlier                     
-                     vote = presvote == 2)
+                     black=race == 2,
+                     vote = presvote == 2) %>%
+          dplyr::select(income, race, educ1, partyid3, ideo, vote)
 
+names(nes1992new)[-6]
+
+for (column in names(nes1992new)[-6]){
+  nes1992new[is.na(nes1992new[, column]), column] <- "missing"
+  nes1992new[, column] <- as.factor(nes1992new[, column])
+}
+summary(nes1992new)
 ```
 
 
