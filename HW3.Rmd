@@ -365,12 +365,15 @@ summary(nes1992new)
 
 19. For any of above variables, suggest possible reasons why they may be missing.
 
-
+We can see that there are few missing data for partyid. It's because once people choose a party, it's very likely for the person to persist. While education changed constantly and is difficult to record, so there are more missing data for education. 
 
 
 20.  Rerun your selected model and create a table of parameter estimates and confidence intervals for the odds ratios.  You should have an additional coefficient for any categorical variable with missing data.   Comment on any changes in results for the model including the missing data and the previous one that used only complete data.
 ```{r}
 glm4<-glm(formula=vote~poli_id+education:race,data=nes1992new,family="binomial")
 summary(glm4)
-
 ```
+
+
+
+
