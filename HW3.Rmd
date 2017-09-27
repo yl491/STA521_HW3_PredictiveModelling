@@ -317,8 +317,8 @@ As the error rate for null is 0.412 and the error rate for our model is 0.215,ou
 table<-matrix(NA,20,3)
 j=1 
 for(i in rownames(coefficients(summary(glm3)))){
-  table[j,1]<-exp((summary(glm3)$coefficients[j,1])+(summary(glm3)$coefficients[j,2])*(summary(glm3)$coefficients[j,3]))
-  table[j,2]<-exp((summary(glm3)$coefficients[j,1])-(summary(glm3)$coefficients[j,2])*(summary(glm3)$coefficients[j,3]))
+  table[j,1]<-exp((summary(glm3)$coefficients[j,1])+(summary(glm3)$coefficients[j,2])*1.96)
+  table[j,2]<-exp((summary(glm3)$coefficients[j,1])-(summary(glm3)$coefficients[j,2])*1.96)
   table[j,3]<-exp(summary(glm3)$coefficients[j,1])
   j=j+1
 }
@@ -328,8 +328,14 @@ rownames(table)<-rownames(coefficients(summary(glm3)))
 kable(table)
 ```
 According to the p value of the summary of our chosen model, four predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black.
-17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
 
+17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
+We have identify five important coefficients.
+As poli_id liberal increase by one unit, we expect the odds of voting for bush will be exp(-2.91279 ) times smaller
+As poli_id moderate increase by one unit, we expect the odds of voting for bush will be  exp(-1) times smaller
+As interaction of education college graduate with race of blackincrease by one unit, we expect the odds of voting for bush will be exp(-2.77)smaller
+As interaction of education high school graduate with race of balck increase by one unit, we expect the odds of voting for bush will be exp(-2.78) smaller
+As interaction of education some college and race of black increase by one unit, we expect the odds of voting for bush will be exp(-2.74) smaller
 
 18.  In the above analysis, we removed missing data.  Repeat the data cleaning steps, but remove only the rows where the response variable, `presvote` is missing.  Recode all of the predictors (including income) so that there is a level that is 'missing' for any NA's for each variable.  How many observations are there now compared to the complete data?
 ```{r}
