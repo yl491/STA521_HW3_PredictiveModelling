@@ -325,16 +325,16 @@ rownames(table)<-rownames(coefficients(summary(glm3)))
 kable(table)
 ```
 \
-Answer: According to the p value of the summary of our chosen model, four predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black.\
+Answer: According to the p value of the summary of our chosen model, five predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black. In a word the input variables poli_id and interaction of education and race are all very important.\
 
 17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
 \
-We have identify five important coefficients.
-As poli_id liberal increase by one unit, we expect the odds of voting for bush will be exp(-2.91279 ) times smaller
-As poli_id moderate increase by one unit, we expect the odds of voting for bush will be  exp(-1) times smaller
-As interaction of education college graduate with race of blackincrease by one unit, we expect the odds of voting for bush will be exp(-2.77)smaller
-As interaction of education high school graduate with race of balck increase by one unit, we expect the odds of voting for bush will be exp(-2.78) smaller
-As interaction of education some college and race of black increase by one unit, we expect the odds of voting for bush will be exp(-2.74) smaller\
+We have identify five important coefficients in the previous problem.To interprete those key coeeffcients, we have following conclusion.
+When a person identify his poli_id as liberal, we expect the odds of voting for bush decrease.
+When a person identify his poli_id as moderate, we expect the odds of voting for bush will be  smaller
+When a person has  education in college, with race of black, we expect the odds of voting for bush will decrease.
+When a person has  education in high school, with race of black, we expect the odds of voting for bush will decrease.
+When a person has  education in some college with race of black, we expect the odds of voting for bush will decrease.\
 
 18.  In the above analysis, we removed missing data.  Repeat the data cleaning steps, but remove only the rows where the response variable, `presvote` is missing.  Recode all of the predictors (including income) so that there is a level that is 'missing' for any NA's for each variable.  How many observations are there now compared to the complete data?
 ```{r}
