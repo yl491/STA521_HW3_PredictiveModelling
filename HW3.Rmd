@@ -372,6 +372,21 @@ We can see that there are few missing data for partyid. It's because once people
 ```{r}
 glm4<-glm(formula=vote~poli_id+education:race,data=nes1992new,family="binomial")
 summary(glm4)
+
+
+table<-matrix(NA,34,3)
+j=1 
+for(i in rownames(coefficients(summary(glm3)))){
+  table[j,1]<-exp((summary(glm4)$coefficients[j,1])+(summary(glm4)$coefficients[j,2])*1.96)
+  table[j,2]<-exp((summary(glm4)$coefficients[j,1])-(summary(glm4)$coefficients[j,2])*1.96)
+  table[j,3]<-exp(summary(glm4)$coefficients[j,1])
+  j=j+1
+}
+colnames(table)<-c("97.5%CI","2.5%CI", "odds ratio")
+rownames(table)<-rownames(coefficients(summary(glm4)))
+
+kable(table)
+
 ```
 
 
