@@ -265,14 +265,19 @@ Answer: As each party has its own distinct political ideology, so there may be i
 ```{r}
 #predict<-predict(fit,type="response")
 #table(y,predict>0.5)
-x<-predict(glm3,type="response")
-y<-resid(glm3)
-binnedplot(x,y)
+#x<-predict(glm3,type="response")
+#y<-resid(glm3)
+#binnedplot(x,y)
 
-binnedplot(glm3$linear.predictors,rstandard(glm3))
+
+
+#
+binnedplot(nes1992filter$age, rstandard(glm3))
+binnedplot(nes1992filter$state,rstandard(glm3))
+binnedplot(na.omit(nes1992filter$dlikes),rstandard(glm3))
 ```
 \
-Answer: I don't think there is any obvious patterns for these binned points. They look random to me. Therefore, I will not recommend to add any other predictors.\
+Answer: For variabl age and variable state, most of the points lie in the 95% CI, and I don't see any obvious patterns. However, there is a pattern in the plot for variable dlikes, which suggests it may need to be inluded to the model.\
 
 14.  Evaluate and compare the different models you fit.  Consider coefficient estimates (are they stable across models) and standard errors (any indications of identifiability problems), residual plots and deviances.\
 Answer1: We compare the w/ and w/o the interaction, as is mentioned by the professor in Piazza.\
