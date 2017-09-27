@@ -165,13 +165,6 @@ vote.glm.2000<-glm(formula=vote~income,data=nes19522000,subset=year==2000,family
 
 conf_int<-matrix(data=NA, nrow=13, ncol=3)
 
-#jjj<-summary(vote.glm.1952)
-#jjjj<-coefficients(jjj)
-#jjjj[2,1]
-#oddsr<-exp(jjjj[2,1]*4)
-
-#exp(coefficients(summary(vote.glm.1952))[2,1]*4)
-
 conf_int[1,]<-cbind(exp(coefficients(summary(vote.glm.1952))[2,1]*4),exp(4*confint(vote.glm.1952,"income"))[1],exp(4*confint(vote.glm.1952,"income"))[2])
 conf_int[2,]<-cbind(exp(coefficients(summary(vote.glm.1956))[2,1]*4),exp(4*confint(vote.glm.1956,"income"))[1],exp(4*confint(vote.glm.1956,"income"))[2])
 conf_int[3,]<-cbind(exp(coefficients(summary(vote.glm.1960))[2,1]*4),exp(4*confint(vote.glm.1960,"income"))[1],exp(4*confint(vote.glm.1960,"income"))[2])
@@ -207,9 +200,18 @@ ggplot(conf_int_df,aes(x=rownames(conf_int_df),y=Value))+geom_point()+geom_liner
 9. Fit a logistic regression using income and year as a factor  with an interaction i.e. `income*factor(year)` to the data from 1952-2000.  Find the log odds ratio for income for each year by combining parameter estimates and show that these are the same as in the respective individual logistic regression models fit separately to the data for each year.
 ```{r}
 vote.glm_inte<-glm(formula=vote~income*factor(year),data=nes19522000,family=binomial())
-summary(vote.glm_inte)
+#summary(vote.glm_inte)
+su<-coefficients(summary(vote.glm_inte))
+  
 
-exp(0.10712*4-0.066048*4)
+oddsr<-numeric(13)
+oddsr[1]=exp(su[2,1]*4)
+for (i in 1: 12)
+{
+  oddsr[i+1]=exp(4*(su[2,1]+su[14+i,1]))
+}
+  
+oddsr
 
 ```
 
@@ -266,14 +268,12 @@ Answer: As each party has its own distinct political ideology, so there may be i
 ```{r}
 #predict<-predict(fit,type="response")
 #table(y,predict>0.5)
-x<-predict(glm3,type="response")
-y<-resid(glm3)
-binnedplot(x,y)
-
-binnedplot(glm3$linear.predictors,rstandard(glm3))
+binnedplot(nes1992filter$age, rstandard(glm3))
+binnedplot(nes1992filter$state,rstandard(glm3))
+binnedplot(na.omit(nes1992filter$dlikes),rstandard(glm3))
 ```
 \
-Answer: I don't think there is any obvious patterns for these binned points. They look random to me. Therefore, I will not recommend to add any other predictors.\
+Answer: For variabl age and variable state, most of the points lie in the 95% CI, and I don't see any obvious patterns. However, there is a pattern in the plot for variable dlikes, which suggests it may need to be inluded to the model.\
 
 14.  Evaluate and compare the different models you fit.  Consider coefficient estimates (are they stable across models) and standard errors (any indications of identifiability problems), residual plots and deviances.\
 Answer1: We compare the w/ and w/o the interaction, as is mentioned by the professor in Piazza.\
