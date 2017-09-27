@@ -334,7 +334,7 @@ rownames(table)<-rownames(coefficients(summary(glm3)))
 kable(table)
 ```
 \
-According to the p value of the summary of our chosen model, four predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black.\
+Answer: According to the p value of the summary of our chosen model, four predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black.\
 
 17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
 \
@@ -373,11 +373,12 @@ for (column in names(nes1992new)[-6]){
 }
 summary(nes1992new)
 ```
-
+\
+Answer: Now we have 1304 observations.\
 
 19. For any of above variables, suggest possible reasons why they may be missing.
 \
-We can see that there are few missing data for partyid. It's because once people choose a party, it's very likely for the person to persist. While education changed constantly and is difficult to record, so there are more missing data for education. 
+We can see that there are few missing data for partyid. It's because once people choose a party, it's very likely for the person to persist. Because education changed constantly and is difficult to record, there are more missing data for education. 
 \
 
 20.  Rerun your selected model and create a table of parameter estimates and confidence intervals for the odds ratios.  You should have an additional coefficient for any categorical variable with missing data.   Comment on any changes in results for the model including the missing data and the previous one that used only complete data.
