@@ -13,6 +13,7 @@ library(magrittr)
 library(plyr)
 library(dplyr)
 library(ggplot2)
+library(knitr)
 # add other libraries
 ```
 
@@ -206,21 +207,12 @@ ggplot(conf_int_df,aes(x=rownames(conf_int_df),y=Value))+geom_point()+geom_liner
 9. Fit a logistic regression using income and year as a factor  with an interaction i.e. `income*factor(year)` to the data from 1952-2000.  Find the log odds ratio for income for each year by combining parameter estimates and show that these are the same as in the respective individual logistic regression models fit separately to the data for each year.
 ```{r}
 vote.glm_inte<-glm(formula=vote~income*factor(year),data=nes19522000,family=binomial())
-su<-coefficients(summary(vote.glm_inte))
+summary(vote.glm_inte)
 
-#exp(0.10712*4-0.066048*4)
-oddsr<-numeric(13)
-oddsr[1]=exp(su[2,1]*4)
-for (i in 1: 12)
-{
-  oddsr[i+1]=exp(4*(su[2,1]+su[14+i,1]))
-}
-  
-oddsr#from 1952~2000
+exp(0.10712*4-0.066048*4)
 
 ```
-\
-Answer: Same as in problem 7.\
+
 
 10.  Create a plot of fitted probabilities and confidence intervals as in question 4, with curves for all years in the same plot. 
 ```{r}
@@ -274,19 +266,14 @@ Answer: As each party has its own distinct political ideology, so there may be i
 ```{r}
 #predict<-predict(fit,type="response")
 #table(y,predict>0.5)
-#x<-predict(glm3,type="response")
-#y<-resid(glm3)
-#binnedplot(x,y)
+x<-predict(glm3,type="response")
+y<-resid(glm3)
+binnedplot(x,y)
 
-
-
-#
-binnedplot(nes1992filter$age, rstandard(glm3))
-binnedplot(nes1992filter$state,rstandard(glm3))
-binnedplot(na.omit(nes1992filter$dlikes),rstandard(glm3))
+binnedplot(glm3$linear.predictors,rstandard(glm3))
 ```
 \
-Answer: For variabl age and variable state, most of the points lie in the 95% CI, and I don't see any obvious patterns. However, there is a pattern in the plot for variable dlikes, which suggests it may need to be inluded to the model.\
+Answer: I don't think there is any obvious patterns for these binned points. They look random to me. Therefore, I will not recommend to add any other predictors.\
 
 14.  Evaluate and compare the different models you fit.  Consider coefficient estimates (are they stable across models) and standard errors (any indications of identifiability problems), residual plots and deviances.\
 Answer1: We compare the w/ and w/o the interaction, as is mentioned by the professor in Piazza.\
@@ -315,39 +302,55 @@ Answer: the Q-Q plot of glm3 is much better! the left part almost connects to th
 error.rate = function(pred, true) {
   mean((pred > .5 & true == 0) | (pred < .5 & true == 1))
 }
-glm.probs=predict(glm3)
-glm.pred=rep ("No" ,1133)
-glm.pred[glm.probs >.5]=" Yes"
-table(glm.pred ,nes1992filter$vote )
-```
-(49+72)/(49+72+393+619)
+glm.probs=predict(glm3,type='response')
+glm.null<-glm(vote~1,data=nes1992filter,family = "binomial")
+predictnull=predict(glm.null,type="response")
+table(nes1992filter$vote,glm.probs>0.5)
+1-(509+380)/(509+159+85+380)
+table(nes1992filter$vote,predictnull>0.5)
+1-668/(668+465)
 
+```
+As the error rate for null is 0.412 and the error rate for our model is 0.215,our model perform better
 16.  For your chosen model, discuss and compare the importance of each input variable in the prediction.   Provide a neatly formatted table of odds ratios  and 95\% confidence intervals.
 ```{r}
+table<-matrix(NA,20,3)
+j=1 
+for(i in rownames(coefficients(summary(glm3)))){
+  table[j,1]<-exp((summary(glm3)$coefficients[j,1])+(summary(glm3)$coefficients[j,2])*(summary(glm3)$coefficients[j,3]))
+  table[j,2]<-exp((summary(glm3)$coefficients[j,1])-(summary(glm3)$coefficients[j,2])*(summary(glm3)$coefficients[j,3]))
+  table[j,3]<-exp(summary(glm3)$coefficients[j,1])
+  j=j+1
+}
+colnames(table)<-c("lower bound 95% confidence interval","upper bound 95% confidence interval", "odds ratio")
+rownames(table)<-rownames(coefficients(summary(glm3)))
 
+kable(table)
 ```
-
+According to the p value of the summary of our chosen model, four predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black.
 17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
 
 
 18.  In the above analysis, we removed missing data.  Repeat the data cleaning steps, but remove only the rows where the response variable, `presvote` is missing.  Recode all of the predictors (including income) so that there is a level that is 'missing' for any NA's for each variable.  How many observations are there now compared to the complete data?
-```{r}
-nes1992new <- nes %>%
-  filter(!is.na(presvote)) %>%
+```{r data}
+# Data are also at http://www.stat.columbia.edu/~gelman/arm/examples/nes
+
+nes <- read.dta("nes5200_processed_voters_realideo.dta",
+                   convert.factors=F)
+# Data cleaning
+# remove NA's for key variables first
+nes1992filter2 = nes %>% 
+              filter(!is.na(presvote)) %>%
               filter(presvote %in% 1:2) %>% 
+# limit to year 1992 t0 2000 and add new varialbes
               filter(year == 1992) %>%
               mutate(female = gender -1,
-                     black=race == 2,
-                     vote = presvote == 2) %>%
-          dplyr::select(income, race, educ1, partyid3, ideo, vote)
+                     black=race ==2,
+# recode vote so that vote = 1 corresponds to a vote for Bush,
+# and vote=0 is a vote for Clinton, where votes for Ross Perot were 
+# removed earlier                     
+                     vote = presvote == 2)
 
-names(nes1992new)[-6]
-
-for (column in names(nes1992new)[-6]){
-  nes1992new[is.na(nes1992new[, column]), column] <- "missing"
-  nes1992new[, column] <- as.factor(nes1992new[, column])
-}
-summary(nes1992new)
 ```
 
 
