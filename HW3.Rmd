@@ -206,12 +206,21 @@ ggplot(conf_int_df,aes(x=rownames(conf_int_df),y=Value))+geom_point()+geom_liner
 9. Fit a logistic regression using income and year as a factor  with an interaction i.e. `income*factor(year)` to the data from 1952-2000.  Find the log odds ratio for income for each year by combining parameter estimates and show that these are the same as in the respective individual logistic regression models fit separately to the data for each year.
 ```{r}
 vote.glm_inte<-glm(formula=vote~income*factor(year),data=nes19522000,family=binomial())
-summary(vote.glm_inte)
+su<-coefficients(summary(vote.glm_inte))
 
-exp(0.10712*4-0.066048*4)
+#exp(0.10712*4-0.066048*4)
+oddsr<-numeric(13)
+oddsr[1]=exp(su[2,1]*4)
+for (i in 1: 12)
+{
+  oddsr[i+1]=exp(4*(su[2,1]+su[14+i,1]))
+}
+  
+oddsr#from 1952~2000
 
 ```
-
+\
+Answer: Same as in problem 7.\
 
 10.  Create a plot of fitted probabilities and confidence intervals as in question 4, with curves for all years in the same plot. 
 ```{r}
