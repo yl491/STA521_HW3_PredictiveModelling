@@ -3,9 +3,9 @@ title: "HW3 [Team 12]"
 author: '[Yunxuan Li, Wenxin Liao, Yan Zhao]'
 date: "Due September 27, 2017"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -69,7 +69,7 @@ names(c)=colnames(nes1992)
 c[c>0]="Missing"
 c[c==0]="Good"
 cc<-as.matrix(c)
-
+cc
 ```
 \
 
@@ -98,9 +98,7 @@ For rich, the odds of voting for republican is 3.68 larger than the odds of poor
 4.  Obtain fitted probabilities and 95% confidence intervals for the income categories using the `predict` function.  Use `ggplot` to recreate the plots in figure 5.1 of Gelman & Hill.  *write a general function?*
 
 ```{r}
-
-
-vote.pre=predict(vote.glm,data=nes1992,data.frame(income=c(1,2,3,4,5)),type='response',interval=c("confidence"),level=0.95)
+vote.pre=predict(vote.glm,data=nes1992,data.frame(income=c(1,2,3,4,5)),type='response',interval="confidence",level=0.95)
 vote.pre
 #use the version below#
 #nes1992$vote.1 = as.double(nes1992$vote)
