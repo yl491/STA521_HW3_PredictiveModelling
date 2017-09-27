@@ -322,7 +322,7 @@ for(i in rownames(coefficients(summary(glm3)))){
   table[j,3]<-exp(summary(glm3)$coefficients[j,1])
   j=j+1
 }
-colnames(table)<-c("lower bound 95% confidence interval","upper bound 95% confidence interval", "odds ratio")
+colnames(table)<-c("97.5%CI","2.5%CI", "odds ratio")
 rownames(table)<-rownames(coefficients(summary(glm3)))
 
 kable(table)
