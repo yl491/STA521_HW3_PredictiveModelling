@@ -101,7 +101,7 @@ For rich, the odds of voting for republican is 3.68 larger than the odds of poor
 
 
 vote.pre=predict(vote.glm,data=nes1992,data.frame(income=c(1,2,3,4,5)),type='response',interval=c("confidence"),level=0.95)
-
+vote.pre
 #use the version below#
 #nes1992$vote.1 = as.double(nes1992$vote)
 #ggplot()+geom_point(data=nes1992,aes(income,vote.1),position="jitter")+geom_smooth(data=nes1992,method="glm",method.args=list(family="binomial"),aes(income,vote.1),col="red",se=T)
@@ -376,6 +376,7 @@ We can see that there are few missing data for partyid. It's because once people
 
 20.  Rerun your selected model and create a table of parameter estimates and confidence intervals for the odds ratios.  You should have an additional coefficient for any categorical variable with missing data.   Comment on any changes in results for the model including the missing data and the previous one that used only complete data.
 ```{r}
+
 glm4<-glm(formula=vote~poli_id+education:race,data=nes1992new,family="binomial")
 summary(glm4)
 
@@ -392,6 +393,7 @@ colnames(table)<-c("97.5%CI","2.5%CI", "odds ratio")
 rownames(table)<-rownames(coefficients(summary(glm4)))
 
 kable(table)
+
 
 ```
 
