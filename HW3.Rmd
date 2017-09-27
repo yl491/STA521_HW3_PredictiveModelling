@@ -49,7 +49,7 @@ nes1992 = nes %>% filter(!is.na(black)) %>%
                      vote = presvote == 2)
 ```
 
-done 1. Summarize the data for 1992 noting which variables have missing data.  Which variables are categorical but are coded as numerically? \
+1. Summarize the data for 1992 noting which variables have missing data.  Which variables are categorical but are coded as numerically? \
 
 
 Answer: "gender", "race", "education", "prevote"，urban, region, income, occup, union, religion, martial status, partyid, fatherparty, motherparty, dislikes, rlikes are all categorical but are coded as numerically.
@@ -73,7 +73,7 @@ cc<-as.matrix(c)
 ```
 \
 
-done 2. Fit the logistic regression  to estimate the probability that an individual would vote Bush (Republican) as a function of income and provide a summary of the model.
+2. Fit the logistic regression  to estimate the probability that an individual would vote Bush (Republican) as a function of income and provide a summary of the model.
 ```{r}
 vote.glm=glm(formula=vote~income,data=nes1992,family=binomial())
 summary(vote.glm)
@@ -81,7 +81,7 @@ summary(vote.glm)
 ```
 
 
-done 3. Obtain a point estimate and create a 95% confidence interval for the odds ratio for voting Republican for a rich person (income category 5) compared to a poor person (income category 1). *Hint this is more than a one unit change; calculate manually and then show how to modify the output from confint*. Provide a sentence interpreting the result.
+3. Obtain a point estimate and create a 95% confidence interval for the odds ratio for voting Republican for a rich person (income category 5) compared to a poor person (income category 1). *Hint this is more than a one unit change; calculate manually and then show how to modify the output from confint*. Provide a sentence interpreting the result.
 ```{r}
 
 oddsratio=exp(0.32599*(5-1))
@@ -117,7 +117,7 @@ ggplot(data=nes1992,aes(x=income,y=as.numeric(vote)))+geom_point(position=positi
 
 ```
 
-UNDONE!!!!!!!!ADDS ANALYSIS 5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
+5.  What does the residual deviance or any diagnostic plots suggest about the model?  (provide code for p-values and output and plots) 
 ```{r}
 
 vote.glm0=glm(vote~1,data=nes1992,family=binomial)
@@ -127,7 +127,7 @@ plot(vote.glm)
 ```
 \
 Answer: Figure 3 suggests underfitting.\
-done 6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
+6. Create a new data set by the filtering and mutate steps above, but now include years between 1952 and 2000.
 ```{r}
 
 
@@ -149,7 +149,7 @@ nes19522000 = nes %>% filter(!is.na(black)) %>%
                      vote = presvote == 2)
 ```
 
-done 7. Fit a separate logistic regression for each year from 1952 to 2000, using the `subset` option in `glm`,  i.e. add `subset=year==1952`.  For each find the 95% Confidence interval for the odds ratio of voting republican for rich compared to poor for each year in the data set from 1952 to 2000.
+7. Fit a separate logistic regression for each year from 1952 to 2000, using the `subset` option in `glm`,  i.e. add `subset=year==1952`.  For each find the 95% Confidence interval for the odds ratio of voting republican for rich compared to poor for each year in the data set from 1952 to 2000.
 ```{r}
 
 vote.glm.1952<-glm(formula=vote~income,data=nes19522000,subset=year==1952,family=binomial())
@@ -185,7 +185,7 @@ conf_int[13,]<-cbind(exp(coefficients(summary(vote.glm.2000))[2,1]*4),exp(4*conf
 colnames(conf_int)=cbind("Value","lower","upper")
 rownames(conf_int)=c("1952","1956","1960","1964","1968","1972","1976","1980","1984","1988","1992","1996","2000")
 
-conf_int
+#conf_int
 knitr::kable(conf_int)
 
 
@@ -195,7 +195,7 @@ conf_int_df<-as.data.frame(conf_int)
 
 
 ```
-done 8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4.
+8.  Using `ggplot` plot the confidence intervals over time similar to the display in Figure 5.4.
 ```{r}
 ggplot(conf_int_df,aes(x=rownames(conf_int_df),y=Value))+geom_point()+geom_linerange(aes(ymin=lower,ymax=upper))+xlab("Year")+ylab("CI")
 ```
@@ -215,7 +215,8 @@ oddsr
 
 ```
 
-
+\
+Answer: Comparing this with the table in problem 7, we can see the numbers of oddsratio are the same.\
 10.  Create a plot of fitted probabilities and confidence intervals as in question 4, with curves for all years in the same plot. 
 ```{r}
 #shape,size,alpha in geom point
@@ -259,7 +260,7 @@ glm3<-glm(formula=vote~poli_id+education:race,data=nes1992filter,family="binomia
 summary(glm3)
 ```
 \
-Answer: As each party has its own distinct political ideology, so there may be interaction between them.\
+Answer: We think political identification has an influence on vote; also, race may have an interaction with education.\
 13.  Plot binned residuals using the function `binnedplot` from package `arm` versus some of the additional predictors in the 1992 dataframe.  Are there any suggestions that the mean or distribution of residuals is different across the levels of the other predictors and that these predictors should be added to the model?  (Provide plots and any other summaries to explain).   
 ```{r}
 #predict<-predict(fit,type="response")
@@ -307,7 +308,8 @@ table(nes1992filter$vote,predictnull>0.5)
 1-668/(668+465)
 
 ```
-As the error rate for null is 0.412 and the error rate for our model is 0.215,our model perform better
+\
+Answer: As the error rate for null is 0.412 and the error rate for our model is 0.215,our model perform better
 \
 16.  For your chosen model, discuss and compare the importance of each input variable in the prediction.   Provide a neatly formatted table of odds ratios  and 95\% confidence intervals.
 ```{r}
@@ -325,7 +327,7 @@ rownames(table)<-rownames(coefficients(summary(glm3)))
 kable(table)
 ```
 \
-According to the p value of the summary of our chosen model, four predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black.\
+Answer: According to the p value of the summary of our chosen model, four predictors has very low p value, which means we reject null and those are very significant in predicting our response variable.Those predictors are poli_id liberal, poli_id moderate,interaction of education college graduate with race of black, interaction of education high school graduate with race of balck and interaction of education some college and race of black.\
 
 17.  Provide a paragraph summarizing your findings and interpreting key coefficients (providing ranges of supporting values from above) in terms of the odds of voting for Bush.  Attempt to write this at a level that readers of the New York Times Upshot column could understand.   
 \
@@ -364,11 +366,12 @@ for (column in names(nes1992new)[-6]){
 }
 summary(nes1992new)
 ```
-
+\
+Answer: Now we have 1304 observations.\
 
 19. For any of above variables, suggest possible reasons why they may be missing.
 \
-We can see that there are few missing data for partyid. It's because once people choose a party, it's very likely for the person to persist. While education changed constantly and is difficult to record, so there are more missing data for education. 
+We can see that there are few missing data for partyid. It's because once people choose a party, it's very likely for the person to persist. Because education changed constantly and is difficult to record, there are more missing data for education. 
 \
 
 20.  Rerun your selected model and create a table of parameter estimates and confidence intervals for the odds ratios.  You should have an additional coefficient for any categorical variable with missing data.   Comment on any changes in results for the model including the missing data and the previous one that used only complete data.
