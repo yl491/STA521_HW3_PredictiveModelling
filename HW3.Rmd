@@ -339,7 +339,12 @@ nes1992new <- nes %>%
               mutate(female = gender -1,
                      black=race == 2,
                      vote = presvote == 2) %>%
+
+  
           dplyr::select(income, race, educ1, partyid3, ideo, vote)
+
+nes1992new$poli_id<-mapvalues(nes1992new$ideo, from=c("1","3","5"), to =c("liberal","moderate","conservative"))  
+nes1992new$education<-mapvalues(nes1992new$educ1, from=c("1","2","3","4"), to =c("no high school","high school graduate","some college","college graduate"))
 
 names(nes1992new)[-6]
 
@@ -350,6 +355,7 @@ for (column in names(nes1992new)[-6]){
 summary(nes1992new)
 ```
 
+Answer:There are now 1304 observations. 
 
 19. For any of above variables, suggest possible reasons why they may be missing.
 
@@ -357,4 +363,15 @@ summary(nes1992new)
 
 
 20.  Rerun your selected model and create a table of parameter estimates and confidence intervals for the odds ratios.  You should have an additional coefficient for any categorical variable with missing data.   Comment on any changes in results for the model including the missing data and the previous one that used only complete data.
+
+```{r}
+glm4<-glm(formula=vote~poli_id+education:race,data=nes1992new,family="binomial")
+summary(glm4)
+
+```
+
+
+
+
+
 
