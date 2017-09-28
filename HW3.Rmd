@@ -349,11 +349,7 @@ nes1992new <- nes %>%
   
           dplyr::select(income, race, educ1, partyid3, ideo, vote)
 
-<<<<<<< HEAD
-nes1992new$poli_id<-mapvalues(nes1992new$ideo, from=c("1","3","5"), to =c("liberal","moderate","conservative"))  
-nes1992new$education<-mapvalues(nes1992new$educ1, from=c("1","2","3","4"), to =c("no high school","high school graduate","some college","college graduate"))
 
-=======
 nes1992new$poli_id<-mapvalues(nes1992new$ideo, from=c("1","3","5"), to =c("liberal","moderate","conservative"))
 nes1992new$gender<-mapvalues(nes1992new$gender, from=c("1","2"), to =c("male","female"))
 nes1992new$race<-mapvalues(nes1992new$race, from=c("1","2","3","4","5","7"), to =c("white","black","asian","native american","hispanic","other"))
@@ -361,7 +357,7 @@ nes1992new$education<-mapvalues(nes1992new$educ1, from=c("1","2","3","4"), to =c
 
 
 
->>>>>>> 67d02cddfd182b9e4189d11597e40226263e93b2
+
 names(nes1992new)[-6]
 
 for (column in names(nes1992new)[-6]){
@@ -370,20 +366,19 @@ for (column in names(nes1992new)[-6]){
 }
 summary(nes1992new)
 ```
-<<<<<<< HEAD
+
 
 Answer:There are now 1304 observations. 
-=======
-\
-Answer: Now we have 1304 observations.\
->>>>>>> 67d02cddfd182b9e4189d11597e40226263e93b2
 
 19. For any of above variables, suggest possible reasons why they may be missing.
 \
-We can see that there are few missing data for partyid. It's because once people choose a party, it's very likely for the person to persist. Because education changed constantly and is difficult to record, there are more missing data for education. 
+Answer:We can see that there are few missing data for partyid. It's because once people choose a party, it's very likely for the person to persist. Because education changed constantly and is difficult to record, there are more missing data for education. 
 \
 
 20.  Rerun your selected model and create a table of parameter estimates and confidence intervals for the odds ratios.  You should have an additional coefficient for any categorical variable with missing data.   Comment on any changes in results for the model including the missing data and the previous one that used only complete data.
+
+Answer: In this model, income is no longer a continuous and numerical variable, but a categorical variable.Missing datas also have coefficient, which allow us to see how people who don’t belong to certain
+category tend to vote.
 ```{r}
 
 glm4<-glm(formula=vote~poli_id+education:race,data=nes1992new,family="binomial")
@@ -414,9 +409,3 @@ glm4<-glm(formula=vote~poli_id+education:race,data=nes1992new,family="binomial")
 summary(glm4)
 
 ```
-
-
-
-
-
-
